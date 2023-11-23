@@ -60,4 +60,27 @@ then
 	exit 3
 fi
 
-FILE_NAME=`echo $DATA | cut -d " " -f 2` #cortamos con el delimitador que es el espacio y nos quedamos con la 2a columna que es el nombre
+FILE_NAME=`echo $DATA | cut -d " " -f 2` 
+
+#(arriba) cortamos con el delimitador que es el espacio y nos quedamos con la 2a columna que es el nombre
+
+echo "(13) Listen"
+
+DATA=`nc -l -p 3333 -w 0`
+
+echo "(16) Store & Send"
+
+if [ "$DATA" == "" ]
+then
+	echo "ERROR 4: EMPTY DATA"
+	sleep 1
+	echo "KO_DATA" | nc $CLIENT 3333
+	exit 4
+fi
+
+echo $DATA > inbox/$FILE_NAME
+
+sleep 1
+echo "OK_DATA" | nc $CLIENT 3333
+
+exit 0

@@ -53,3 +53,25 @@ echo "FILE_NAME fary1.txt" | nc $SERVER 3333
 echo "(11) Listen"
 DATA=`nc -l -p 3333 -w 0`
 
+echo "(14) Test&Send"
+
+if [ "$DATA" != "OK_FILE_NAME" ]
+then
+	echo "ERROR 3: BAD FILE NAME PREFIX"
+	exit 3
+fi
+
+sleep 1
+cat imgs/fary1.txt | nc $SERVER 3333
+
+echo "(15) Listen"
+DATA=`nc -l -p 3333 -w 0`
+
+if [ "$DATA" != "OK_DATA" ]
+then
+	echo "ERROR 4: BAD DATA"
+	exit 4
+fi
+
+echo "FIN"
+exit 0
