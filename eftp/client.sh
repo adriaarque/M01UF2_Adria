@@ -49,7 +49,9 @@ echo "(10) Send"
 
 sleep 1
 
-echo "FILE_NAME fary1.txt" | nc $SERVER 3333
+FILE_NAME="fary1.txt"
+FILE_MD5=`echo $FILE_NAME | md5sum | cut -d " " -f 1`
+echo "FILE_NAME $FILE_NAME $FILE_MD5" | nc $SERVER 3333
 
 echo "(11) Listen"
 DATA=`nc -l -p 3333 -w $TIMEOUT`
@@ -73,6 +75,17 @@ then
 	echo "ERROR 4: BAD DATA"
 	exit 4
 fi
+
+echo "(18) Send"
+
+sleep 1
+
+FILE_MD5=`cat imgs/$FILE_NAME | md5sum | cut -d " " -f 1`
+
+echo "FILE_MD5 $FILE_MD5" | nc $SERVER 3333
+
+echo "(19) Listen"
+DATA=`nc -l -p 3333 -w $TIMEOUT`
 
 echo "FIN"
 exit 0
