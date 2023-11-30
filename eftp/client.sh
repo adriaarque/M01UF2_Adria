@@ -87,5 +87,13 @@ echo "FILE_MD5 $FILE_MD5" | nc $SERVER 3333
 echo "(19) Listen"
 DATA=`nc -l -p 3333 -w $TIMEOUT`
 
+echo "(21) Test"
+
+if [ "$DATA" != "OK_FILE_MD5" ]
+then
+	echo "ERROR: FILE MD5"
+	exit 5
+fi
+
 echo "FIN"
 exit 0

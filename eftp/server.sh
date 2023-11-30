@@ -106,7 +106,29 @@ DATA=`nc -l -p 3333 -w $TIMEOUT`
 
 echo "(20) Test&Send"
 
-if [ "$DATA" != 
+echo $DATA
+
+PREFIX=`echo $DATA | cut -d " " -f 1`
+
+if [ "$PREFIX" != "FILE_MD5" ]
+then
+	echo "ERROR 5: BAD FILE MD5 PREFIX"
+	echo "KO_FILE_MD5" | nc $CLIENT 3333
+	exit 5
+fi
+
+FILE_MD5=`echo $DATA | cut -d " " -f 2`
+
+FILE_MD5_LOCAL=`cat inbox/$FILE_NAME | md5sum | cut -d " " -f 1`
+
+if [ "$FILE_MD5" != "$FILE_MD5_LOCAL" ]
+then
+	echo "ERROR 5: BAD FILE MD5"
+	echo "KO_FILE_MD5" | nc $CLIENT 3333
+	exit 5
+fi
+
+echo "OK_FILE_MD5" | nc $CLIENT 3333
 
 echo "FIN"
 exit 0
