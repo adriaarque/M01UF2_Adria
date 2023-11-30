@@ -47,7 +47,7 @@ then
 	exit 2
 fi
 
-echo "(10) Send"
+echo "(10) Send FILE_NAME"
 
 sleep 1
 
